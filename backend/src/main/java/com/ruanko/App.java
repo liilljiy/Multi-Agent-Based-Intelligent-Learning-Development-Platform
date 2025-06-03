@@ -21,6 +21,6 @@ public class App
     public static void main( String[] args )
     {
 		SpringApplication.run(App.class, args);
-		System.out.println("程序正在运行...");
+		System.out.println("程序正在运行中...");
     }
 }
