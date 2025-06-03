@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>删除详情</title>
+</head>
+<body>
+确认删除?<br>
+<form th:action="@{/articleDel}" method="post">
+    <!-- 这里使用了隐藏域，我觉得这个id没有必要显示给用户，也不需要用户输入，但是需要在表单提交的时候能将这个id提交给服务器，所以使用了隐藏域 -->
+    <input type="hidden" th:value="${article.id}" name="id">
+    <input type="submit" value="删除">
+</form>
+<a th:href="@{/articleShowList}" >返回新闻列表</a>
+</body>
+</html>

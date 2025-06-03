@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.ruanko.mapper.ClassMapper">
+
+	<resultMap id="BaseResultClazz" type="com.ruanko.pojo.entity.Clazz">
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="class_name" jdbcType="VARCHAR" property="className"/>
+	</resultMap>
+
+	<resultMap id="BaseResultClazzVO" type="com.ruanko.pojo.vo.ClazzVO">
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="class_name" jdbcType="VARCHAR" property="className"/>
+		<!--第一种方式 -->
+<!--		<collection property="studentList" column="id" javaType="ArrayList" ofType="Student"-->
+<!--					select="cn.edu.example.mybatis.mapper.StudentMapper.findStudentByClassId"/>-->
+		<!--第二种方式 -->
+		<collection property="studentList" javaType="ArrayList" ofType="Student"
+					 resultMap="com.ruanko.mapper.StudentMapper.BaseResultStudent"/>
+	</resultMap>
+	<!--第一种方式 -->
+<!--	<select id="findClazzVOById" parameterType="Integer"  resultMap="BaseResultClazzVO">-->
+<!--		select * from t_class where id = #{id}-->
+<!--	</select>-->
+	<!--第二种方式 -->
+	<select id="findClazzVOById" parameterType="Integer"  resultMap="BaseResultClazzVO">
+		select * from t_class tc left join t_student ts  on tc.id=ts.class_id where tc.id = #{id}
+	</select>
+
+	<select id="findClassById" parameterType="Integer" resultMap="BaseResultClazz">
+		select * from t_class where id = #{id}
+	</select>
+
+</mapper>
