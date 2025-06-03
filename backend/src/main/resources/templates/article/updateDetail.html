@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>更新新闻信息</title>
+</head>
+<body>
+
+修改新闻<br>
+<form th:action="@{articleUpdate}" method="post" th:object="${article}">
+    <input type="hidden" name="id" th:value="*{id}" />
+    标题<input type="text" name="title" th:value="*{title}" />
+    <br>作者<input type="text" name="author" th:value="*{author}" />
+    <br>内容
+    <input name="content" rows="5" cols="50" th:value="*{content}" />
+    <br><input type="submit" value="保存修改">
+</form>
+<a th:href="@{/articleShowList}" >返回新闻列表</a>
+</body>
+</html>

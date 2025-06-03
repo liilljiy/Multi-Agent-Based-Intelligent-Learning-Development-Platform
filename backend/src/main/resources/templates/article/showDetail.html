@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>显示新闻详情</title>
+</head>
+<body>
+    显示新闻内容
+<table border="1" th:object="${article}">
+    显示新闻详细内容
+    <tr >
+        新闻标题:<td th:text="*{title}"></td>
+        作者:<td th:text="*{author}">
+        新闻内容:  <td th:text="*{content}">
+    </tr>
+</table>
+</body>
+</html>

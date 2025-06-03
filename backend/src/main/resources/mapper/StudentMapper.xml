@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.ruanko.mapper.StudentMapper">
+	<resultMap id="BaseResultStudent" type="com.ruanko.pojo.entity.Student">
+		<id column="stuno" jdbcType="INTEGER" property="stuno"/>
+		<result column="stuname" jdbcType="VARCHAR" property="stuname"/>
+		<result column="grade" jdbcType="VARCHAR" property="grade"/>
+		<result column="dept" jdbcType="VARCHAR" property="dept"/>
+		<result column="classname" jdbcType="VARCHAR" property="classname"/>
+		<result column="class_id" jdbcType="INTEGER" property="classId"/>
+	</resultMap>
+	<resultMap id="BaseResultStudentVO" type="com.ruanko.pojo.vo.StudentVO">
+		<id column="stuno" jdbcType="INTEGER" property="stuno"/>
+		<result column="stuname" jdbcType="VARCHAR" property="stuname"/>
+		<result column="grade" jdbcType="VARCHAR" property="grade"/>
+		<result column="dept" jdbcType="VARCHAR" property="dept"/>
+		<result column="classname" jdbcType="VARCHAR" property="classname"/>
+		<!--第一种方式 -->
+<!--		<association property="clazz" column="class_id"-->
+<!--					 select="cn.edu.example.mybatis.mapper.ClassMapper.findClassById"/>-->
+		<!--第二种方式 -->
+		<association property="clazz" javaType="Clazz"
+		resultMap="com.ruanko.mapper.ClassMapper.BaseResultClazz"/>
+	</resultMap>
+
+
+	<!--第一种方式 -->
+<!--	<select id="findStudentVOByStuno" parameterType="Integer"  resultMap="BaseResultStudentVO">-->
+<!--		select * from t_student where stuno = #{stuno}-->
+<!--	</select>-->
+	<!--第二种方式 -->
+	<select id="findStudentVOByStuno" parameterType="Integer"  resultMap="BaseResultStudentVO">
+		select * from t_student ts left join t_class tc  on ts.class_id=tc.id where ts.stuno = #{stuno}
+	</select>
+
+	<select id="findStudentByClassId" parameterType="Integer" resultMap="BaseResultStudent">
+		select * from t_student where class_id = #{classId}
+	</select>
+
+	<!--多条件分页查询-->
+	<select id="findStudentPage" parameterType="Student" resultMap="BaseResultStudent">
+		select * from t_student
+		<where>
+			<if test="param1 != null">
+				<if test="param1.stuname!=null">
+					and stuname=#{param1.stuname}
+				</if>
+			</if>
+		</where>
+		limit #{pageNum},#{pageSize}
+	</select>
+
+	<!-- 条件查询-->
+	<select id="findStudentByCondition" parameterType="Student" resultType="Student">
+		select * from t_student
+		<where>
+		<if test="stuname!=null">
+			and stuname=#{stuname}
+		</if>
+		</where>
+	</select>
+	<!--1.根据学号获取学生信息 -->
+	<select id="findStudentByStuno" parameterType="Integer"
+		resultType="Student">
+		select * from t_student where stuno = #{stuno}
+	</select>
+	<!--2.获取学生信息列表 -->
+	<select id="findStudentList" resultType="Student">
+		select * from t_student
+	</select>
+	<!--3.添加学生信息 -->
+	<insert id="insertStudent" parameterType="Student">
+		insert into t_student values
+		(#{stuno},#{stuname},#{grade},#{dept},#{classname},#{classId})
+	</insert>
+	<!--4.修改学生信息 -->
+	<update id="updateStudent" parameterType="Student">
+		update t_student set dept = #{dept}, classname = #{classname}
+		where stuno = #{stuno}
+	</update>
+	<!--5.删除学生信息 -->
+	<delete id="deleteStudent" parameterType="Integer">
+		delete from t_student where stuno = #{stuno}
+	</delete>
+
+</mapper>

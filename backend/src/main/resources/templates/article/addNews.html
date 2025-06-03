@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加新闻</title>
+</head>
+<body>
+添加新闻 <br>
+<form th:action="@{/articleAdd}" method="post">
+    标题<input type="text" name="title"/>
+    <br>作者<input type="text" name="author"/>
+    <br>内容<textarea name="content" rows="5" cols="50"></textarea>
+    <br><input type="submit" value="添加">
+</form>
+</body>
+</html>
