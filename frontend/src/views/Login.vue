@@ -105,24 +105,27 @@ const rules = {
 
 const handleLogin = async () => {
   if (!loginFormRef.value) return
-  
+
   try {
     await loginFormRef.value.validate()
     loading.value = true
-    
-    const response = await request.post<LoginResponse>('/api/auth/login', loginForm)
-    console.log('登录响应数据:', response.data)
-    
-    if (response.data && response.data.success) {
-      localStorage.setItem('token', response.data.token)
+
+    const response = await request.post('/api/auth/login', loginForm)
+
+    // response.data 是内部的 data 部分
+    const res = response.data
+
+    if (res.success) {
+      localStorage.setItem('token', res.token)
       if (rememberMe.value) {
         localStorage.setItem('username', loginForm.username)
+      } else {
+        localStorage.removeItem('username')
       }
-      ElMessage.success(response.data.message || '登录成功')
-      // 使用重定向路径或默认跳转到首页
+      ElMessage.success(res.message || '登录成功')
       router.push(redirectPath.value)
     } else {
-      ElMessage.error(response.data?.message || '登录失败')
+      ElMessage.error(res.message || '登录失败')
     }
   } catch (error: any) {
     console.error('登录错误:', error)
@@ -135,6 +138,8 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+
 </script>
 
 <style scoped>

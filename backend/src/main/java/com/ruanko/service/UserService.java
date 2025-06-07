@@ -23,4 +23,5 @@ public interface UserService extends BaseService<User>{
 
 
     boolean existsByUsername(String username);
+
 }

@@ -1,6 +1,8 @@
 package com.ruanko.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -24,12 +26,14 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler(Path+"**").addResourceLocations("file:"+filePath);
     }
 
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/toLogin").setViewName("user/login");
 //        registry.addViewController("/toUpload").setViewName("uploadphotos");
     }
+
 }
 //@Configuration
 //public class WebConfig extends WebMvcConfigurerAdapter {

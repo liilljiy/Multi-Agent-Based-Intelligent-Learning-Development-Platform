@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ruanko.pojo.entity.User;
 import com.ruanko.service.UserService;
+import com.ruanko.utils.JWTUtils;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -42,8 +43,11 @@ public class UserRestController {
         if (loginSuccess) {
             try {
                 User userInfo = userService.findByUsername(username);
+                // 这里改成调用 JwtUtil 生成 token
+                String token = JWTUtils.generateToken(username);
+
                 data.put("user", userInfo);
-                data.put("token", "mock-jwt-token-" + System.currentTimeMillis());
+                data.put("token", token);
                 data.put("success", true);
                 data.put("message", "登录成功");
                 return new Result<>(ResultCode.SUCCESS, data);
@@ -59,35 +63,4 @@ public class UserRestController {
         }
     }
 
-    @PostMapping(value = "/auth/register")
-    public Result<Map<String, Object>> register(@RequestBody Map<String, String> registerData) {
-        String username = registerData.get("username");
-        String password = registerData.get("password");
-
-        System.out.println("新用户注册: " + username);
-
-        Map<String, Object> data = new HashMap<>();
-
-        if (userService.existsByUsername(username)) {
-            data.put("success", false);
-            data.put("message", "用户名已存在");
-            return new Result<>(ResultCode.USER_HAS_EXISTED, data);
-        }
-
-        User newUser = new User();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-
-        boolean saveSuccess = userService.save(newUser);
-
-        if (saveSuccess) {
-            data.put("success", true);
-            data.put("message", "注册成功");
-            return new Result<>(ResultCode.SUCCESS, data);
-        } else {
-            data.put("success", false);
-            data.put("message", "注册失败，请稍后再试");
-            return new Result<>(ResultCode.FAILED, data);
-        }
-    }
 }
